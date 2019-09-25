@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 #basic steps 
 p "Player One, please, make a move"
 player_1_input = gets.chomp
