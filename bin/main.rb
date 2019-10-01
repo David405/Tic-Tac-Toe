@@ -49,9 +49,11 @@ if player_input is not found in board
 p "display_board"
 
 #The above steps would be repeated
+=begin
 while !WIN_COMBINATION do
     "step 1" & "step 2"
 end
+=end
 
 #Print board with registered move
 p "display_board"
