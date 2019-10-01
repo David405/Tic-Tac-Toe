@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 class Player
   require_relative 'board'
 
   attr_reader :name, :marker
 
-  def initialize(mark, marker)
+  def initialize(name, marker)
     @name = name
     @marker = marker
   end
@@ -17,7 +18,7 @@ class Player
     puts "#{name}, choose a position to place your #{marker}"
     position = gets.chomp
 
-    until position =~ /^[0-8]{1}$/ && (board.board[position.to_i] != 'x' && board.board[position.to_i] != 'o')
+      until position =~ /^[0-8]{1}$/ && (board.board[position.to_i] != 'x' && board.board[position.to_i] != 'o')
     puts 'Enter a number that is valid'
     position = gets.chomp
     end

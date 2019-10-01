@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Board
   attr_reader :board
 
@@ -11,15 +12,15 @@ class Board
       0, 1, 2,
       3, 4, 5,
       6, 7, 8
-        ]
-    end
+             ]
+  end
 
   def update_board(position, player)
     @board[position] = player.marker
     display_board(@board)
   end
 
-  private 
+  private
 
   def display_board(board)
     puts ''
