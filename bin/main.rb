@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class Game 
     load 'lib/board.rb'
     load 'lib/players.rb'
