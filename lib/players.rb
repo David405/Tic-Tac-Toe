@@ -21,7 +21,7 @@ class Player
 
     until position =~ /^[0-8]{1}$/ && (board.board[position.to_i] != 'x' && board.board[position.to_i] != 'o')
       puts 'Enter a number that is valid'
-    position = gets.chomp
+      position = gets.chomp
     end
   end
 end
