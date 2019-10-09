@@ -1,94 +1,82 @@
-class Game 
-    load 'lib/board.rb'
-    load 'lib/players.rb'
+#!/usr/bin/env ruby
 
-    def initialize
-        @player1 = nil
-        @player2 = nil
-        @board = nil
-        @game_over = false
-        @turn = 0
+# frozen_string_literal: true
 
-        setup_players
-        create_board
-        play_game
-    end
+require "./lib/board.rb"
+require "./lib/player.rb"
+require "./lib/game.rb"
 
-    private 
+puts " Welcome to Tic Tac Toe!"
+puts "Player 1, what is your name?"
+player_1 = Player.new(gets.chomp)
+player_1.marker = "x"
+puts "#{player_1.name}. You' are x"
+puts "Now, player number 2, what is your name?"
+player_2 = Player.new(gets.chomp)
+player_2.marker = "o"
+puts "#{player_2.name}, you are o"
+puts "Enter OK to continue"
 
-    def setup_players
-        puts 'Welcome to the match'
+repeat_game = true
 
-        puts 'Player 1, enter name:'
-        name1 = gets.chomp
-        @player1 = Player.new(name1, 'x')
+while repeat_game
+  new_board = Board.new if gets.chomp == "ok" || "OK"  
+  game = Game.new(player_1, player_2)
+  game.board = new_board
 
-        puts 'Player 2, enter name:'
-        name2 = gets.chomp
-        @player2 = Player.new(name2, 'o')
+  while game.game_on
+    puts game.ask_position
+    puts new_board.display_board if game.turn == 0 
+    move = gets.chomp.to_i
 
-        puts '#{@player1.name.capitalize!}, you are x!'
-        puts '#{@player2,name.capitalize!}, you are o!'
-    end
-
-    def create_board
-        @board = Board.new
-    end
-
-    def play_game
-        until @game_over
-            @player2.move(@board)
-            check_status(@player2)
-            @player1.move(@board)
-            check_status(@player1)
+    if game.valid?(move)
+      if game.occupied?(move)
+        while game.occupied?(move)
+          puts "This position is already taken. Enter a valid number between 1 to 9."
+          move = gets.chomp.to_i
+          until game.valid?(move)
+            puts "This move is not valid. Enter a valid number between 1 to 9."
+            move = gets.chomp.to_i
+          end
         end
+      else
+        puts "The selected move is valid"
+      end
+    else
+      until game.valid?(move)
+        puts "This move is not valid. Enter a valid number between 1 to 9."
+        move = gets.chomp.to_i
+        while game.occupied?(move)
+          puts "This position is already taken. Enter a valid number between 1 to 9."
+          move = gets.chomp.to_i
+        end
+      end
     end
 
-    def check_status(player)
-        win_combinations = [
-            #horizontal
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            #vertical
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            #diagonal
-            [0, 4, 8], [2, 4, 6]
-        ]
+    game.play(move)
+    puts game.board.display_board
 
-        player_won = win_combinations.any? do |c|
-            c.all? do |i|
-                @board.board[i] == player.marker
-            end
-        end
-
-        if player_won
-            end_game(player)
-        else
-            @turn += 1
-            end_game('tie') if @turn >= 9
-        end
+    if game.draw?
+      puts "Its a tie"
+      game.game_on = false
     end
 
-    def end_game(player)
-        if player == 'tie'
-            puts "It's a tie."
-        else
-            puts '#{player.name} won!'
-        end
-        @game_over = true
-        reset_game
+    if game.win?
+      puts game.display_winner
+      game.game_on = false
     end
+  end
 
-    def reset_game
-        puts ''
-        puts 'Restart game?'
-        response = gets.chomp
-        if response == 'yes'
-            Game.new
-        else
-            puts 'Game over'
-            exit
-        end
+  unless game.game_on
+    puts "Restart game? (Enter yes or no)"
+    case gets.chomp
+    when "yes"
+      puts "Enter OK to continue."
+    when "no"
+      repeat_game = false
+      abort "Game over"
+    else
+      puts "Kindly enter yes or no"
     end
+  end
 end
-
-Game.new
