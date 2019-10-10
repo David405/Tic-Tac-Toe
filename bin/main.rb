@@ -1,79 +1,82 @@
 #!/usr/bin/env ruby
-=begin
-class Board 
-    attr_reader :board
 
-    def initialize
-        @board = board
-    end
-@board is a 3x3 matrix
-    def board
-        @board = [
-            0,1,2,
-            3,4,5,
-            6,7,8
-        ]
+# frozen_string_literal: true
+
+require "./lib/board.rb"
+require "./lib/player.rb"
+require "./lib/game.rb"
+
+puts " Welcome to Tic Tac Toe!"
+puts "Player 1, what is your name?"
+player_1 = Player.new(gets.chomp)
+player_1.marker = "x"
+puts "#{player_1.name}. You' are x"
+puts "Now, player number 2, what is your name?"
+player_2 = Player.new(gets.chomp)
+player_2.marker = "o"
+puts "#{player_2.name}, you are o"
+puts "Enter OK to continue"
+
+repeat_game = true
+
+while repeat_game
+  new_board = Board.new if gets.chomp == "ok" || "OK"  
+  game = Game.new(player_1, player_2)
+  game.board = new_board
+
+  while game.game_on
+    puts game.ask_position
+    puts new_board.display_board if game.turn == 0 
+    move = gets.chomp.to_i
+
+    if game.valid?(move)
+      if game.occupied?(move)
+        while game.occupied?(move)
+          puts "This position is already taken. Enter a valid number between 1 to 9."
+          move = gets.chomp.to_i
+          until game.valid?(move)
+            puts "This move is not valid. Enter a valid number between 1 to 9."
+            move = gets.chomp.to_i
+          end
+        end
+      else
+        puts "The selected move is valid"
+      end
+    else
+      until game.valid?(move)
+        puts "This move is not valid. Enter a valid number between 1 to 9."
+        move = gets.chomp.to_i
+        while game.occupied?(move)
+          puts "This position is already taken. Enter a valid number between 1 to 9."
+          move = gets.chomp.to_i
+        end
+      end
     end
 
-     def display_board(board)
-    puts ''
-    puts " #{board[0]} | #{board[1]} | #{board[2]} "
-    puts '--- --- ---'
-    puts " #{board[3]} | #{board[4]} | #{board[5]} "
-    puts '--- --- ---'
-    puts " #{board[6]} | #{board[7]} | #{board[8]} "
-    puts ''
+    game.play(move)
+    puts game.board.display_board
+
+    if game.draw?
+      puts "Its a tie"
+      game.game_on = false
+    end
+
+    if game.win?
+      puts game.display_winner
+      game.game_on = false
+    end
   end
-=end
-#game = true
-#step 1 player one 
-p "Player One, please, make a move from @board"
-player_1_input = gets.chomp
-p "Move completed!"
 
-#Print board with registered move
-p "display_board"
-
-#step 2 player two 
-p "Player Two, please, make a move from @board"
-player_2_input = gets.chomp
-p "Move completed"
-
-#move check
-=begin 
-if player_input is not found in board
-    p "invalid move"
-=end
-
-#Print board with registered move
-p "display_board"
-
-#The above steps would be repeated
-=begin
-while !WIN_COMBINATION do
-    "step 1" & "step 2"
-end
-=end
-
-#Print board with registered move
-p "display_board"
-
-#if a player tries to make a move to an occupied space
-p "Player One, please, make a move."
-player_1_input = gets.chomp
-p "This space is already occupied!"
-
-#if a player enters a move that matches the @WIN_COMBINATION
-#game = false
-p "${Player} won!"
-
-#Print board with registered move
-p "display_board"
-
-#if all spaces are occupied without a @WIN_COMBINATION
-#game = false
-p "Match is a draw"
-
-#Print board with registered move
-p "display_board"
+  unless game.game_on
+    puts "Restart game? (Enter yes or no)"
+    case gets.chomp
+    when "yes"
+      puts "Enter OK to continue."
+    when "no"
+      repeat_game = false
+      abort "Game over"
+    else
+      puts "Kindly enter yes or no"
+    end
+  end
 end
