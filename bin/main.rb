@@ -10,7 +10,7 @@ puts " Welcome to Tic Tac Toe!"
 puts "Player 1, what is your name?"
 player_1 = Player.new(gets.chomp)
 player_1.marker = "x"
-puts "#{player_1.name}. You' are x"
+puts "#{player_1.name}. You are x"
 puts "Now, player number 2, what is your name?"
 player_2 = Player.new(gets.chomp)
 player_2.marker = "o"
@@ -20,7 +20,7 @@ puts "Enter OK to continue"
 repeat_game = true
 
 while repeat_game
-  new_board = Board.new if gets.chomp == "ok" || "OK"  
+  new_board = Board.new 
   game = Game.new(player_1, player_2)
   game.board = new_board
 
@@ -75,8 +75,6 @@ while repeat_game
     when "no"
       repeat_game = false
       abort "Game over"
-    else
-      puts "Kindly enter yes or no"
     end
   end
 end
