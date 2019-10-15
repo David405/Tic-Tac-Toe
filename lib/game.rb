@@ -1,14 +1,17 @@
 # frozen_string_literal: true
+require_relative 'board.rb'
+require_relative 'player.rb'
 
 class Game
   attr_accessor :turn, :board, :game_on
   attr_reader :player1, :player2, :player1_moves, :player2_moves, :win_combinations
 
-  def initialize(player1, player2)
+  def initialize(player1, player2, board)
     @turn = 0
     @game_on = true
     @player1 = player1
     @player2 = player2
+    @board = board
     @player1_moves = []
     @player2_moves = []
     @win_combinations = [[0, 1, 2],

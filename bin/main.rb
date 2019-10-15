@@ -21,8 +21,7 @@ repeat_game = true
 
 while repeat_game
   new_board = Board.new 
-  game = Game.new(player_1, player_2)
-  game.board = new_board
+  game = Game.new(player_1, player_2, new_board)
 
   while game.game_on
     puts game.ask_position
