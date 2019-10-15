@@ -52,7 +52,7 @@ RSpec.describe Game do
       "-----------\n" \
       "   | X |   \n" \
       "-----------\n" \
-      "   |   |   "
+      '   |   |   '
     end
 
     let(:board_player2) do
@@ -60,7 +60,7 @@ RSpec.describe Game do
       "-----------\n" \
       "   | X |   \n" \
       "-----------\n" \
-      "   |   | O "
+      '   |   | O '
     end
 
     context 'when Player 1 choose an empty space' do
